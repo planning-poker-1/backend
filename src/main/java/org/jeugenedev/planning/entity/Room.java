@@ -12,11 +12,12 @@ public class Room {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
-    private String uuid;
+    private String hashLink;
+    private String title;
     @ManyToOne(cascade = CascadeType.ALL)
     private User owner;
-    @ManyToMany(cascade = CascadeType.ALL)
-    private List<User> administrators;
+    @ManyToMany
+    private List<User> users;
     @OneToMany(mappedBy = "owner")
     private List<Poll> polls;
 }

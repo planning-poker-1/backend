@@ -13,6 +13,6 @@ public class User {
     @Column(name = "user_id")
     private long id;
     private String username;
-    @ManyToMany(cascade = CascadeType.ALL)
+    @ManyToMany(cascade = CascadeType.ALL, mappedBy = "users")
     private List<Room> rooms;
 }
