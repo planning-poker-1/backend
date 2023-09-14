@@ -3,6 +3,8 @@ package org.jeugenedev.planning.entity;
 import jakarta.persistence.*;
 import lombok.Data;
 
+import java.util.List;
+
 @Entity
 @Data
 public class Poll {
@@ -15,5 +17,14 @@ public class Poll {
     private String description;
     @ManyToOne(cascade = CascadeType.ALL)
     private Room owner;
-    private boolean close;
+    private boolean close = false;
+
+    public Poll() {
+    }
+
+    public Poll(long expires, String description, Room owner) {
+        this.expires = expires;
+        this.description = description;
+        this.owner = owner;
+    }
 }

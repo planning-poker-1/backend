@@ -1,5 +1,6 @@
 package org.jeugenedev.planning.controller;
 
+import org.jeugenedev.planning.entity.Poll;
 import org.jeugenedev.planning.entity.Room;
 import org.jeugenedev.planning.entity.User;
 import org.jeugenedev.planning.model.RoomModel;
@@ -46,5 +47,19 @@ public class RoomController {
     @RequestMapping(path = "/getLink", method = {RequestMethod.GET, RequestMethod.POST})
     public Map<String, String> getRoomLink(@RequestParam(name = "user_id") User user, @RequestParam(name = "room_id") Room room) {
         return roomModel.getRoomLink(user, room);
+    }
+
+    @RequestMapping(path = "/{room_id}/createPoll", method = {RequestMethod.GET, RequestMethod.POST})
+    public Poll createPoll(@PathVariable(name = "room_id") Room room,
+                           @RequestParam(name = "creator_id") User user,
+                           @RequestParam String description,
+                           @RequestParam long expires) {
+        return roomModel.createPoll(room, user, description, expires);
+    }
+
+    @RequestMapping(path = "/kill/{room_id}", method = {RequestMethod.GET, RequestMethod.POST})
+    public Room kill(@PathVariable(name = "room_id") Room room,
+                     @RequestParam(name = "user_id") User user) {
+        return roomModel.kill(user, room);
     }
 }

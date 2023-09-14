@@ -1,12 +1,14 @@
 package org.jeugenedev.planning.model;
 
 import org.jeugenedev.planning.entity.MembersRoom;
+import org.jeugenedev.planning.entity.Poll;
 import org.jeugenedev.planning.entity.Room;
 import org.jeugenedev.planning.entity.User;
 import org.jeugenedev.planning.exceptions.AccessDeniedException;
 import org.jeugenedev.planning.exceptions.RoomNotFoundException;
 import org.jeugenedev.planning.exceptions.UserAlreadyAddedException;
 import org.jeugenedev.planning.repos.MembersRoomRepos;
+import org.jeugenedev.planning.repos.PollRepos;
 import org.jeugenedev.planning.repos.RoomRepos;
 import org.jeugenedev.planning.utils.crypto.CryptoUtils;
 import org.springframework.stereotype.Component;
@@ -20,11 +22,13 @@ import java.util.UUID;
 public class RoomModel {
     private final RoomRepos roomRepos;
     private final MembersRoomRepos membersRoomRepos;
+    private final PollRepos pollRepos;
     private final CryptoUtils cryptoUtils;
 
-    public RoomModel(RoomRepos roomRepos, MembersRoomRepos membersRoomRepos, CryptoUtils cryptoUtils) {
+    public RoomModel(RoomRepos roomRepos, MembersRoomRepos membersRoomRepos, PollRepos pollRepos, CryptoUtils cryptoUtils) {
         this.roomRepos = roomRepos;
         this.membersRoomRepos = membersRoomRepos;
+        this.pollRepos = pollRepos;
         this.cryptoUtils = cryptoUtils;
     }
 
@@ -58,5 +62,20 @@ public class RoomModel {
             throw new AccessDeniedException();
         }
         return Collections.singletonMap("link", room.getHash());
+    }
+
+    public Poll createPoll(Room room, User user, String description, long expires) {
+        if(room.getOwner().getId() != user.getId()) {
+            throw new AccessDeniedException();
+        }
+        return pollRepos.save(new Poll(expires, description, room));
+    }
+
+    public Room kill(User user, Room room) {
+        if(user.getId() != room.getOwner().getId()) {
+            throw new AccessDeniedException();
+        }
+        roomRepos.delete(room);
+        return room;
     }
 }
