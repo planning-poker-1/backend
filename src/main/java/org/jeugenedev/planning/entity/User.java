@@ -5,7 +5,8 @@ import lombok.Data;
 
 import java.util.List;
 
-@Entity(name = "users")
+@Entity
+@Table(name = "users")
 @Data
 public class User {
     @Id
@@ -13,6 +14,4 @@ public class User {
     @Column(name = "user_id")
     private long id;
     private String username;
-    @ManyToMany(cascade = CascadeType.ALL, mappedBy = "users")
-    private List<Room> rooms;
 }

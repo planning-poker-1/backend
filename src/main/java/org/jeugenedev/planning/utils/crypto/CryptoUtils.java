@@ -15,7 +15,7 @@ public class CryptoUtils {
         this.md5 = MessageDigest.getInstance("MD5");
     }
 
-    public String md5(String source) throws NoSuchAlgorithmException {
+    public String md5(String source) {
         byte[] hash = this.md5.digest(source.getBytes(StandardCharsets.UTF_8));
         return HexFormat.of().formatHex(hash);
     }

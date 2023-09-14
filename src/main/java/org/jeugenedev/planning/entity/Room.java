@@ -1,5 +1,6 @@
 package org.jeugenedev.planning.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Data;
 
@@ -12,12 +13,20 @@ public class Room {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
-    private String hashLink;
+    @JsonIgnore
+    private String hash;
     private String title;
     @ManyToOne(cascade = CascadeType.ALL)
     private User owner;
-    @ManyToMany
-    private List<User> users;
+    @JsonIgnore
     @OneToMany(mappedBy = "owner")
     private List<Poll> polls;
+
+    public Room() {}
+
+    public Room(String hashLink, String title, User owner) {
+        this.hash = hashLink;
+        this.title = title;
+        this.owner = owner;
+    }
 }
